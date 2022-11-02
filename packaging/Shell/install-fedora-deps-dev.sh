@@ -31,7 +31,7 @@ dnf --refresh -y install \
 cd /tmp && \
 git clone --recursive https://github.com/LLNL/sundials.git && \
 mkdir -p sundials/build && cd sundials/build && \
-git checkout v3.2.1 && \
+git checkout v6.4.0 && \
 cmake -DCMAKE_BUILD_TYPE=Release ..  && \
 make -j$(nproc) install
 
