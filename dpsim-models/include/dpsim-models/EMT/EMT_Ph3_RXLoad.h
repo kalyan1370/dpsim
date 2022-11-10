@@ -10,6 +10,7 @@
 
 #include <dpsim-models/SimPowerComp.h>
 #include <dpsim-models/Solver/MNAInterface.h>
+#include <dpsim-models/Solver/DAEInterface.h>
 #include <dpsim-models/EMT/EMT_Ph3_Capacitor.h>
 #include <dpsim-models/EMT/EMT_Ph3_Inductor.h>
 #include <dpsim-models/EMT/EMT_Ph3_Resistor.h>
@@ -23,6 +24,7 @@ namespace CPS {
 			class RXLoad :
 				public SimPowerComp<Real>,
 				public MNAInterface,
+				public DAEInterface,
 				public SharedFactory<RXLoad> {
 			protected:
 				/// Conductance [S]
@@ -131,6 +133,23 @@ namespace CPS {
 					RXLoad& mLoad;
 					Attribute<Matrix>::Ptr mLeftVector;
 				};
+
+				// #### DAE Section ####
+				/// Derivative of the current
+				MatrixVar<Real> mIntfDerCurrent;
+				///
+				void daeInitialize(double time, double state[], double dstate_dt[], 
+					double absoluteTolerances[], double stateVarTypes[], int& offset);
+				///
+				void daePreStep(double time) {};
+				/// Residual function for DAE Solver
+				void daeResidual(double time, const double state[], const double dstate_dt[], 
+					double resid[], std::vector<int>& off);
+				///
+				void daePostStep(double Nexttime, const double state[], 
+					const double dstate_dt[], int& offset);
+				///
+				int getNumberOfStateVariables() {return 3;}
 			};
 		}
 	}

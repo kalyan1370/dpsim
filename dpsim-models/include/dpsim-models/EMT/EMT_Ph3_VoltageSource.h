@@ -9,6 +9,7 @@
 
 #include <dpsim-models/SimPowerComp.h>
 #include <dpsim-models/Solver/MNAInterface.h>
+#include <dpsim-models/Solver/DAEInterface.h>
 #include <dpsim-models/Signal/SignalGenerator.h>
 #include <dpsim-models/Signal/SineWaveGenerator.h>
 #include <dpsim-models/Signal/FrequencyRampGenerator.h>
@@ -27,6 +28,7 @@ namespace CPS {
 			/// a new equation ej - ek = V is added to the problem.
 			class VoltageSource :
 				public MNAInterface,
+				public DAEInterface,
 				public SimPowerComp<Real>,
 				public SharedFactory<VoltageSource> {
 			private:
@@ -97,6 +99,28 @@ namespace CPS {
 					VoltageSource& mVoltageSource;
 					Attribute<Matrix>::Ptr mLeftVector;
 				};
+
+				// #### DAE Section #### (Not yet implemented!!!)
+				
+				/// Derivative of the current
+				MatrixVar<Real> mIntfDerCurrent;
+				/// 
+				Matrix intfDerCurrent() {return mIntfDerCurrent;}
+				/// set init value of the current, calculate and set the 
+				/// initial value of the derivative of the current
+				void setInitialComplexIntfCurrent(Complex initCurrent);
+				///
+				void daePreStep(Real time);
+				///
+				void daeInitialize(double time, double state[], double dstate_dt[],
+					double absoluteTolerances[], double stateVarTypes[], int& offset) {};
+				/// Residual function for DAE Solver
+				void daeResidual(double time, const double state[], const double dstate_dt[], double resid[], std::vector<int>& off) {};
+				///
+				void daePostStep(double Nexttime, const double state[], const double dstate_dt[], int& offset) {};
+				///
+				int getNumberOfStateVariables() {return 0;}
+
 			};
 		}
 	}

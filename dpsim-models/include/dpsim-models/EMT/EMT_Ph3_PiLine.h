@@ -10,6 +10,7 @@
 
 #include <dpsim-models/SimPowerComp.h>
 #include <dpsim-models/Solver/MNAInterface.h>
+#include <dpsim-models/Solver/DAEInterface.h>
 #include <dpsim-models/Base/Base_Ph3_PiLine.h>
 #include <dpsim-models/EMT/EMT_Ph3_Resistor.h>
 #include <dpsim-models/EMT/EMT_Ph3_Inductor.h>
@@ -25,6 +26,7 @@ namespace Ph3 {
 	class PiLine :
 		public SimPowerComp<Real>,
 		public MNAInterface,
+		public DAEInterface,
 		public Base::Ph3::PiLine,
 		public SharedFactory<PiLine> {
 	protected:
@@ -103,6 +105,22 @@ namespace Ph3 {
 		void mnaTearApplyMatrixStamp(Matrix& tearMatrix);
 		void mnaTearApplyVoltageStamp(Matrix& voltageVector);
 		void mnaTearPostStep(Matrix voltage, Matrix current);*/
+
+		// #### DAE Section ####
+		
+		///
+		void daeInitialize(double time, double state[], double dstate_dt[], 
+			double absoluteTolerances[], double stateVarTypes[], int& offset);
+		///
+		void daePreStep(double time) {};
+		///Residual Function for DAE Solver
+		void daeResidual(double time, const double state[], 
+			const double dstate_dt[], double resid[], std::vector<int>& off);
+		///
+		void daePostStep(double Nexttime, const double state[], 
+			const double dstate_dt[], int& counter);
+		///
+		int getNumberOfStateVariables() {return 3;}
 
 	};
 }
