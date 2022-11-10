@@ -39,7 +39,6 @@ namespace Ph1 {
 	class VoltageSource :
 		public SimPowerComp<Complex>,
 		public MNAInterface,
-		public DAEInterface,
 		public SharedFactory<VoltageSource> {
 	private:
 		///
@@ -150,12 +149,6 @@ namespace Ph1 {
 			VoltageSource& mVoltageSource;
 			std::vector< Attribute<Matrix>::Ptr > mLeftVectors;
 		};
-
-		// #### DAE Section ####
-		/// Residual function for DAE Solver
-		void daeResidual(double ttime, const double state[], const double dstate_dt[], double resid[], std::vector<int>& off);
-		///Voltage Getter
-		Complex daeInitialize();
 	};
 }
 }

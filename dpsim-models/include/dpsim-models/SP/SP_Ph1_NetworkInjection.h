@@ -28,8 +28,7 @@ namespace Ph1 {
 		public SimPowerComp<Complex>,
 		public SharedFactory<NetworkInjection>,
 		public PFSolverInterfaceBus,
-		public MNAInterface,
-		public DAEInterface {
+		public MNAInterface {
 
     private:
 		// ### Electrical Subcomponents ###
@@ -140,14 +139,6 @@ namespace Ph1 {
 			NetworkInjection& mNetworkInjection;
 			Attribute<Matrix>::Ptr mLeftVector;
 		};
-
-		// #### DAE Section ####
-		/// Residual function for DAE Solver
-		void daeResidual(double ttime, const double state[], const double dstate_dt[], double resid[], std::vector<int>& off) override;
-		///Voltage Getter
-		Complex daeInitialize() override;
-
-
 };
 }
 }

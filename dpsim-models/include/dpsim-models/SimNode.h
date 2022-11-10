@@ -26,6 +26,13 @@ namespace CPS {
 		UInt mNumFreqs = 0;
 		///
 		Task::List mMnaTasks;
+
+		// #### DAE Section ####
+		///
+		Real mAbsoluteTolerance = 1e-3;
+		/// 
+		MatrixVar<VarType> mDerVoltage;
+
 	public:
 		typedef VarType Type;
 		typedef std::shared_ptr<SimNode<VarType>> Ptr;
@@ -97,6 +104,7 @@ namespace CPS {
 		void setMatrixNodeIndex(UInt phase, UInt matrixNodeIndex) { mMatrixNodeIndex[phase] = matrixNodeIndex; }
 		///
 		void setVoltage(VarType newVoltage) { }
+		void setVoltage(VarType newVoltage, PhaseType phaseType) { }
 		///
 		void setPower(VarType newPower) { }
 
@@ -126,6 +134,15 @@ namespace CPS {
 			SimNode& mNode;
 			std::vector< Attribute<Matrix>::Ptr > mLeftVectors;
 		};
+
+		// #### DAE Section ####
+		///
+		void daeSetAbsoluteTolerance(Real AbsTol);
+		///
+		Real daeGetAbsoluteTolerance();
+		///
+		void setdVoltage(double newVoltage, PhaseType phaseType = PhaseType::Single) { }
+
 	};
 
 	namespace SP {
@@ -152,4 +169,20 @@ namespace CPS {
 
 	template<>
 	void SimNode<Complex>::setVoltage(Complex newVoltage);
+
+	template<>
+	void SimNode<Real>::setVoltage(Real newVoltage, PhaseType phaseType);
+
+	template<>
+	void SimNode<Real>::daeSetAbsoluteTolerance(Real AbsTol);
+
+	template<>
+	void SimNode<Complex>::daeSetAbsoluteTolerance(Real AbsTol);
+
+	template<>
+	Real SimNode<Real>::daeGetAbsoluteTolerance();
+
+	template<>
+	Real SimNode<Complex>::daeGetAbsoluteTolerance();
+
 }

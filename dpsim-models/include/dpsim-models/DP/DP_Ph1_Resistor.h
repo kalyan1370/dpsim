@@ -20,7 +20,6 @@ namespace Ph1 {
 	class Resistor :
 		public Base::Ph1::Resistor,
 		public MNATearInterface,
-		public DAEInterface,
 		public SimPowerComp<Complex>,
 		public SharedFactory<Resistor> {
 	public:
@@ -85,12 +84,6 @@ namespace Ph1 {
 
 		// #### MNA Tear Section ####
 		void mnaTearApplyMatrixStamp(Matrix& tearMatrix);
-
-		// #### DAE Section ####
-		///Residual Function for DAE Solver
-		void daeResidual(double ttime, const double state[], const double dstate_dt[], double resid[], std::vector<int>& off);
-		///Voltage Getter
-		Complex daeInitialize();
 	};
 }
 }
