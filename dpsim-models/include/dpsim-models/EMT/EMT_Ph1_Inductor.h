@@ -10,6 +10,7 @@
 
 #include <dpsim-models/SimPowerComp.h>
 #include <dpsim-models/Solver/MNAInterface.h>
+#include <dpsim-models/Solver/DAEInterface.h>
 #include <dpsim-models/Base/Base_Ph1_Inductor.h>
 
 namespace CPS {
@@ -25,6 +26,7 @@ namespace Ph1 {
 	class Inductor :
 		public Base::Ph1::Inductor,
 		public MNAInterface,
+		public DAEInterface,
 		public SimPowerComp<Real>,
 		public SharedFactory<Inductor> {
 	protected:
@@ -88,6 +90,24 @@ namespace Ph1 {
 			Inductor& mInductor;
 			Attribute<Matrix>::Ptr mLeftVector;
 		};
+
+		// #### DAE Section ####
+		/// Derivative of the current
+		const Attribute<Matrix>::Ptr mIntfDerCurrent;
+		///
+		void daeInitialize(double time, double state[], double dstate_dt[], 
+		double absoluteTolerances[], double stateVarTypes[], int& offset) override;
+		/// Residual function for DAE Solver
+		void daeResidual(double time, const double state[], const double dstate_dt[], 
+			double resid[], std::vector<int>& off) override;
+		/// Calculation of jacobian
+		void daeJacobian(double current_time, const double state[], const double dstate_dt[], 
+			SUNMatrix jacobian, double cj, std::vector<int>& off) override;
+		///
+		void daePostStep(double Nexttime, const double state[], 
+			const double dstate_dt[], int& offset) override;
+		///
+		int getNumberOfStateVariables() override {return 1;}
 	};
 }
 }

@@ -12,6 +12,7 @@
 
 #include <dpsim-models/SimPowerComp.h>
 #include <dpsim-models/Solver/MNAInterface.h>
+#include <dpsim-models/Solver/DAEInterface.h>
 #include <dpsim-models/Base/Base_Ph1_Resistor.h>
 
 namespace CPS {
@@ -21,6 +22,7 @@ namespace Ph1 {
 	class Resistor :
 		public Base::Ph1::Resistor,
 		public MNAInterface,
+		public DAEInterface,
 		public SimPowerComp<Real>,
 		public SharedFactory<Resistor> {
 	protected:
@@ -65,6 +67,23 @@ namespace Ph1 {
 			Resistor& mResistor;
 			Attribute<Matrix>::Ptr mLeftVector;
 		};
+
+		// #### DAE Section ####
+		///
+		void daeInitialize(double time, double state[], double dstate_dt[], 
+			double absoluteTolerances[], double stateVarTypes[], int& counter) override;
+		///Residual Function for DAE Solver
+		void daeResidual(double time, const double state[], const double dstate_dt[], 
+			double resid[], std::vector<int>& off) override;
+		/// Calculation of jacobian
+		void daeJacobian(double current_time, const double state[], const double dstate_dt[], 
+			SUNMatrix jacobian, double cj, std::vector<int>& off) override;
+		///
+		void daePostStep(double Nexttime, const double state[], 
+			const double dstate_dt[], int& counter) override;
+		///
+		int getNumberOfStateVariables() override {return 0;}
+
 	};
 }
 }
