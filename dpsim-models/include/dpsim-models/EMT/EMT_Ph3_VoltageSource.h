@@ -34,9 +34,7 @@ namespace CPS {
 			private:
 				///
 				CPS::Signal::SignalGenerator::Ptr mSrcSig;
-			protected:
-				// Updates voltage according to reference phasor and frequency
-				void updateVoltage(Real time);
+				
 			public:
 				const CPS::Attribute<MatrixComp>::Ptr mVoltageRef;
 				const CPS::Attribute<Real>::Ptr mSrcFreq;
@@ -75,6 +73,8 @@ namespace CPS {
 				void mnaAddPreStepDependencies(AttributeBase::List &prevStepDependencies, AttributeBase::List &attributeDependencies, AttributeBase::List &modifiedAttributes);
 				/// Add MNA post step dependencies
 				void mnaAddPostStepDependencies(AttributeBase::List &prevStepDependencies, AttributeBase::List &attributeDependencies, AttributeBase::List &modifiedAttributes, Attribute<Matrix>::Ptr &leftVector);
+				// Updates voltage according to reference phasor and frequency
+				void updateVoltage(Real time);
 
 				class MnaPreStep : public Task {
 				public:
@@ -104,25 +104,24 @@ namespace CPS {
 				
 				/// Derivative of the current
 				MatrixVar<Real> mIntfDerCurrent;
-				/// 
-				Matrix intfDerCurrent() {return mIntfDerCurrent;}
+				MatrixVar<Real> intfDerCurrent() {return mIntfDerCurrent;}
 				/// set init value of the current, calculate and set the 
 				/// initial value of the derivative of the current
 				void setInitialComplexIntfCurrent(Complex initCurrent);
 				///
 				void daeInitialize(double time, double state[], double dstate_dt[],
-					double absoluteTolerances[], double stateVarTypes[], int& offset) override {};
+					double absoluteTolerances[], double stateVarTypes[], int& offset) override;
 				/// Residual function for DAE Solver
 				void daeResidual(double time, const double state[], const double dstate_dt[], 
-					double resid[], std::vector<int>& off) override {};
+					double resid[], std::vector<int>& off) override;
 				/// Calculation of jacobian
 				void daeJacobian(double current_time, const double state[], const double dstate_dt[], 
-					SUNMatrix jacobian, double cj, std::vector<int>& off) override {};
+					SUNMatrix jacobian, double cj, std::vector<int>& off) override;
 				///
 				void daePostStep(double Nexttime, const double state[], 
-					const double dstate_dt[], int& offset) override {};
+					const double dstate_dt[], int& offset) override;
 				///
-				int getNumberOfStateVariables() override {return 0;}
+				int getNumberOfStateVariables() override {return 3;}
 
 			};
 		}
