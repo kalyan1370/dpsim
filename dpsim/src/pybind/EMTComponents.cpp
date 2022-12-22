@@ -115,7 +115,8 @@ void addEMTPh3Components(py::module_ mEMTPh3) {
         .def(py::init<std::string, CPS::Logger::Level>(), "name"_a, "loglevel"_a = CPS::Logger::Level::off)
 		.def("set_parameters", py::overload_cast<CPS::MatrixComp, CPS::Real>(&CPS::EMT::Ph3::NetworkInjection::setParameters), "V_ref"_a, "f_src"_a=50)
 		.def("connect", &CPS::EMT::Ph3::NetworkInjection::connect)
-		.def("dae_set_abs_tolerance", &CPS::EMT::Ph3::NetworkInjection::daeSetAbsoluteTolerance, "abs_tol"_a);
+		.def("dae_set_abs_tolerance", &CPS::EMT::Ph3::NetworkInjection::daeSetAbsoluteTolerance, "abs_tol"_a)
+		.def("set_initial_current", &CPS::EMT::Ph3::NetworkInjection::setInitialComplexIntfCurrent, "init_current"_a);
 
 	py::class_<CPS::EMT::Ph3::PiLine, std::shared_ptr<CPS::EMT::Ph3::PiLine>, CPS::SimPowerComp<CPS::Real>>(mEMTPh3, "PiLine", py::multiple_inheritance())
         .def(py::init<std::string, CPS::Logger::Level>(), "name"_a, "loglevel"_a = CPS::Logger::Level::off)
@@ -204,5 +205,21 @@ void addEMTPh3Components(py::module_ mEMTPh3) {
 		.def("open", &CPS::EMT::Ph3::SeriesSwitch::open)
 		.def("close", &CPS::EMT::Ph3::SeriesSwitch::close)
 		.def("connect", &CPS::EMT::Ph3::SeriesSwitch::connect);
+
+	py::class_<CPS::EMT::Ph3::ReducedOrderSynchronGeneratorVBR, std::shared_ptr<CPS::EMT::Ph3::ReducedOrderSynchronGeneratorVBR>, CPS::SimPowerComp<CPS::Real>>(mEMTPh3, "ReducedOrderSynchronGeneratorVBR", py::multiple_inheritance())
+		.def("set_base_parameters", &CPS::EMT::Ph3::ReducedOrderSynchronGeneratorVBR::setBaseParameters, "nom_power"_a, "nom_voltage"_a, "nom_frequency"_a)
+		.def("set_initial_values", &CPS::EMT::Ph3::ReducedOrderSynchronGeneratorVBR::setInitialValues, "init_complex_electrical_power"_a, "init_mechanical_power"_a, "init_complex_terminal_voltage"_a);
+
+	py::class_<CPS::EMT::Ph3::SynchronGenerator3OrderVBR, std::shared_ptr<CPS::EMT::Ph3::SynchronGenerator3OrderVBR>, CPS::EMT::Ph3::ReducedOrderSynchronGeneratorVBR>(mEMTPh3, "SynchronGenerator3OrderVBR", py::multiple_inheritance())
+		.def(py::init<std::string, CPS::Logger::Level>(), "name"_a, "loglevel"_a = CPS::Logger::Level::off)
+		.def("set_operational_parameters_per_unit", &CPS::EMT::Ph3::SynchronGenerator3OrderVBR::setOperationalParametersPerUnit, "nom_power"_a, "nom_voltage"_a, "nom_frequency"_a, "H"_a, "Ld"_a, "Lq"_a, "L0"_a, "Ld_t"_a, "Td0_t"_a)
+		.def("connect", &CPS::EMT::Ph3::SynchronGenerator3OrderVBR::connect)
+		.def("dae_set_abs_tolerance", &CPS::EMT::Ph3::SynchronGenerator3OrderVBR::daeSetAbsoluteTolerance, "abs_tol"_a);
+
+	py::class_<CPS::EMT::Ph3::SynchronGenerator4OrderVBR, std::shared_ptr<CPS::EMT::Ph3::SynchronGenerator4OrderVBR>, CPS::EMT::Ph3::ReducedOrderSynchronGeneratorVBR>(mEMTPh3, "SynchronGenerator4OrderVBR", py::multiple_inheritance())
+		.def(py::init<std::string, CPS::Logger::Level>(), "name"_a, "loglevel"_a = CPS::Logger::Level::off)
+		.def("set_operational_parameters_per_unit", &CPS::EMT::Ph3::SynchronGenerator4OrderVBR::setOperationalParametersPerUnit, "nom_power"_a, "nom_voltage"_a, "nom_frequency"_a, "H"_a, "Ld"_a, "Lq"_a, "L0"_a, "Ld_t"_a, "Lq_t"_a, "Td0_t"_a, "Tq0_t"_a)
+		.def("connect", &CPS::EMT::Ph3::SynchronGenerator4OrderVBR::connect)
+		.def("dae_set_abs_tolerance", &CPS::EMT::Ph3::SynchronGenerator4OrderVBR::daeSetAbsoluteTolerance, "abs_tol"_a);
 
 }
