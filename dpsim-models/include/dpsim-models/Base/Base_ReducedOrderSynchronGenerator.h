@@ -11,6 +11,7 @@
 #include <dpsim-models/MNASimPowerComp.h>
 #include <dpsim-models/Solver/MNAInterface.h>
 #include <dpsim-models/Base/Base_Exciter.h>
+#include <dpsim-models/Signal/ExciterDC1Simp.h>
 #include <dpsim-models/Signal/PSSType2.h>
 #include <dpsim-models/Signal/TurbineGovernorType1.h>
 
@@ -85,14 +86,17 @@ namespace Base {
 
 			/// Add governor and turbine
 			void addGovernor(Real T3, Real T4, Real T5, Real Tc, 
-				Real Ts, Real R, Real Pmin, Real Pmax, Real OmRef, Real TmRef);
+				Real Ts, Real R, Real Pmin, Real Pmax, Real OmRef);
 			void addGovernor(std::shared_ptr<Signal::TurbineGovernorType1> turbineGovernor);
+			/// Add automatic voltage regulator
+			void addExciter(CPS::Base::ExciterParameters exciterParameters, ExciterType exciterType = ExciterType::DC1Simp);
 			/// Add automatic voltage regulator
 			void addExciter(std::shared_ptr<Base::Exciter> exciter);
 			/// Add power system stabilizer
 			void addPSS(Real Kp, Real Kv, Real Kw, Real T1, Real T2, Real T3, Real T4, 
 				Real Vs_max, Real Vs_min, Real Tw, Real dt);
 			void addPSS(std::shared_ptr<Signal::PSSType2> PSS);
+
 
 			/// ### Setters ###
 			void scaleInertiaConstant(Real scalingFactor);
@@ -267,101 +271,6 @@ namespace Base {
 			///
 			Real mTimeStep;
 			Real mSimTime;
-<<<<<<< HEAD
-=======
-			
-		public:	
-			/// Destructor - does nothing.
-			virtual ~ReducedOrderSynchronGenerator() { }
-			/// modelAsCurrentSource=true --> SG is modeled as current source, otherwise as voltage source
-			/// Both implementations are equivalent, but the current source implementation is more efficient
-			virtual void setModelAsCurrentSource(Bool modelAsCurrentSource);
-			/// 
-			void setBaseParameters(Real nomPower, Real nomVolt, Real nomFreq);
-			/// Initialization for 3 Order SynGen
-			void setOperationalParametersPerUnit(Real nomPower, 
-				Real nomVolt, Real nomFreq, Real H, Real Ld, Real Lq, Real L0,
-				Real Ld_t, Real Td0_t);
-			/// Initialization for 4 Order SynGen
-			void setOperationalParametersPerUnit(Real nomPower, 
-				Real nomVolt, Real nomFreq, Real H, Real Ld, Real Lq, Real L0,
-				Real Ld_t, Real Lq_t, Real Td0_t, Real Tq0_t);
-			/// Initialization for 6 Order SynGen
-			/// Taa=0 for 6b Order SynGen
-			void setOperationalParametersPerUnit(Real nomPower, 
-				Real nomVolt, Real nomFreq, Real H, Real Ld, Real Lq, Real L0,
-				Real Ld_t, Real Lq_t, Real Td0_t, Real Tq0_t,
-				Real Ld_s, Real Lq_s, Real Td0_s, Real Tq0_s,
-				Real Taa=0);
-			///
-			void setInitialValues(Complex initComplexElectricalPower, 
-				Real initMechanicalPower, Complex initTerminalVoltage);
-
-			/// Add governor and turbine
-			void addGovernor(Real T3, Real T4, Real T5, Real Tc, 
-				Real Ts, Real R, Real Pmin, Real Pmax, Real OmRef, Real TmRef);
-			void addGovernor(std::shared_ptr<Signal::TurbineGovernorType1> turbineGovernor);
-			/// Add automatic voltage regulator
-			void addExciter(std::shared_ptr<Base::Exciter> exciter);
-			/// Add power system stabilizer
-			void addPSS(Real Kp, Real Kv, Real Kw, Real T1, Real T2, Real T3, Real T4, 
-				Real Vs_max, Real Vs_min, Real Tw, Real dt);
-			void addPSS(std::shared_ptr<Signal::PSSType2> PSS);
-
-			/// ### Setters ###
-			void scaleInertiaConstant(Real scalingFactor); 
-
-			/// ### Mna Section ###
-			class MnaPreStep : public Task {
-				public:
-					MnaPreStep(ReducedOrderSynchronGenerator<VarType>& synGen)
-					: Task(**synGen.mName + ".MnaPreStep"), mSynGen(synGen) {
-				    	mModifiedAttributes.push_back(synGen.mRightVector);
-				    	mPrevStepDependencies.push_back(synGen.mIntfVoltage);
-				}
-				void execute(Real time, Int timeStepCount);
-
-				private:
-				ReducedOrderSynchronGenerator<VarType>& mSynGen;
-			};
-
-			class MnaPostStep : public Task {
-			public:
-				MnaPostStep(ReducedOrderSynchronGenerator<VarType>& synGen, Attribute<Matrix>::Ptr leftSideVector) :
-					Task(**synGen.mName + ".MnaPostStep"), 
-					mSynGen(synGen), mLeftVector(leftSideVector) {
-					mAttributeDependencies.push_back(mLeftVector);
-					mModifiedAttributes.push_back(synGen.mIntfVoltage);
-				}
-				void execute(Real time, Int timeStepCount);
-			private:
-				ReducedOrderSynchronGenerator<VarType>& mSynGen;
-				Attribute<Matrix>::Ptr mLeftVector;
-			};
-
-		protected:
-			///
-			ReducedOrderSynchronGenerator(String uid, String name, Logger::Level logLevel);
-			/// 
-			void calculateVBRconstants();
-			/// 
-			void calculateResistanceMatrixConstants();
-			/// 
-			virtual void initializeResistanceMatrix() =0;
-			///
-			void initializeFromNodesAndTerminals(Real frequency);
-			/// Function to initialize the specific variables of each SG model
-			virtual void specificInitialization()=0;
-			///
-        	virtual void stepInPerUnit()=0;
-			
-			// ### MNA Section ###
-        	///
-        	void mnaInitialize(Real omega, Real timeStep, Attribute<Matrix>::Ptr leftVector);
-        	virtual void mnaApplySystemMatrixStamp(Matrix& systemMatrix)=0;
-        	virtual void mnaApplyRightSideVectorStamp(Matrix& rightVector)=0;
-        	virtual void mnaPostStep(const Matrix& leftVector)=0;
->>>>>>> d631b5be (add PSS type 2 and add base class for exciter)
 	};
 }
 }
