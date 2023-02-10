@@ -34,6 +34,13 @@ void SP::Ph1::PiLine::setParameters(Real resistance, Real inductance, Real capac
 
 	**mSeriesRes = resistance;
 	**mSeriesInd = inductance;
+	
+
+	// Resistance must be bigger than 0 to avoid singular admittance matrix
+	if (**mSeriesRes == 0) {
+		**mSeriesRes = 1e-6;
+        mSLog->warn("Zero value for resistance, setting default value of R={} [Ohm]", **mSeriesRes);
+	}
 	SPDLOG_LOGGER_INFO(mSLog, "Resistance={} [Ohm] Inductance={} [H]", **mSeriesRes, **mSeriesInd);
 
     if(capacitance > 0){

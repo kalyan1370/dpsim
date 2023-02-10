@@ -92,6 +92,7 @@ void SP::Ph1::Capacitor::mnaCompApplySystemMatrixStamp(SparseMatrixRow& systemMa
 		SPDLOG_LOGGER_INFO(mSLog, "Add {:e}+j{:e} to system at ({:d},{:d})",
 			-mSusceptance.real(), -mSusceptance.imag(), matrixNodeIndex(1), matrixNodeIndex(0));
 	}
+	mSLog->flush();
 }
 
 void SP::Ph1::Capacitor::mnaCompAddPostStepDependencies(AttributeBase::List &prevStepDependencies, AttributeBase::List &attributeDependencies, AttributeBase::List &modifiedAttributes, Attribute<Matrix>::Ptr &leftVector) {
