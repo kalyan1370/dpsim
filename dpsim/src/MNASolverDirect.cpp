@@ -41,6 +41,16 @@ void MnaSolverDirect<VarType>::switchedMatrixStamp(std::size_t index, std::vecto
 	for (UInt i = 0; i < mSwitches.size(); ++i)
 		mSwitches[i]->mnaApplySwitchSystemMatrixStamp(bit[i], sys, 0);
 
+	/* TODO: FIX!!
+	 * in matrix stamping, there are unnecessary nonzeros introduced. They need to be removed,
+	 * otherwise the linear solver can't solve the system - for unknown reasons for now. Probably because
+	 * the matrix indices are not sorted - at least that's where KLU fails
+	 *
+	 * pruning fixes this, but might not be the most efficient and elegant solution
+	 * (it must be known to developer to prune the matrix after each stamp)
+	 */
+	sys.prune(0.0);
+
 	// Compute LU-factorization for system matrix
 	mDirectLinearSolvers[bit][0]->preprocessing(sys, mListVariableSystemMatrixEntries);
 	auto start = std::chrono::steady_clock::now();
