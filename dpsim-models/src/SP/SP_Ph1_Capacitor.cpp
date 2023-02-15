@@ -140,6 +140,8 @@ void SP::Ph1::Capacitor::calculatePerUnitParameters(Real baseApparentPower){
 	mImpedancePerUnit = mImpedance / mBaseImpedance;
 	mAdmittancePerUnit = 1. / mImpedancePerUnit;
     SPDLOG_LOGGER_INFO(mSLog, "Impedance={} [pu]  Admittance={} [pu]", Logger::complexToString(mImpedancePerUnit), Logger::complexToString(mAdmittancePerUnit));
+
+	mSLog->flush();
 }
 
 void SP::Ph1::Capacitor::pfApplyAdmittanceMatrixStamp(SparseMatrixCompRow & Y) {
@@ -155,4 +157,6 @@ void SP::Ph1::Capacitor::pfApplyAdmittanceMatrixStamp(SparseMatrixCompRow & Y) {
 	//set the circuit matrix values
 	Y.coeffRef(bus1, bus1) += mAdmittancePerUnit;
 	SPDLOG_LOGGER_INFO(mSLog, "#### Y matrix stamping: {}", mAdmittancePerUnit);
+
+	mSLog->flush();
 }

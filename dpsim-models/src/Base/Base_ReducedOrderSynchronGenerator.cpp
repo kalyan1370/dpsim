@@ -483,8 +483,8 @@ void Base::ReducedOrderSynchronGenerator<Complex>::mnaCompPreStep(Real time, Int
 	**mDelta = **mDelta + mTimeStep * (**mOmMech - 1.) * mBase_OmMech;
 
 	// update exciter and PSS variables
-	if (mSynGen.mHasPSS ) {
-		mSynGen.mVpss = mSynGen.mPSS->step(**mSynGen.mOmMech, **mSynGen.mElecTorque, (**mSynGen.mVdq)(0,0), (**mSynGen.mVdq)(1,0), mSynGen.mTimeStep);
+	if (mHasPSS) {
+		mVpss = mPSS->step(**mOmMech, **mElecTorque, (**mVdq)(0,0), (**mVdq)(1,0), mTimeStep);
 	}
 	if (mHasExciter) {
 		mEf_prev = **(mEf);
@@ -513,8 +513,8 @@ void Base::ReducedOrderSynchronGenerator<Real>::mnaCompPreStep(Real time, Int ti
 	**mDelta = **mDelta + mTimeStep * (**mOmMech - 1.) * mBase_OmMech;
 
 	// update exciter and PSS variables
-	if (mSynGen.mHasPSS ) {
-		mSynGen.mVpss = mSynGen.mPSS->step(**mSynGen.mOmMech, **mSynGen.mElecTorque, (**mSynGen.mVdq)(0,0), (**mSynGen.mVdq)(1,0), mSynGen.mTimeStep);
+	if (mHasPSS ) {
+		mVpss = mPSS->step(**mOmMech, **mElecTorque, (**mVdq)(0,0), (**mVdq)(1,0), mTimeStep);
 	}
 	if (mHasExciter) {
 		mEf_prev = **(mEf);

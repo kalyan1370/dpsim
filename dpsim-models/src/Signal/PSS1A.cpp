@@ -50,6 +50,7 @@ void Signal::PSS1A::setParameters(Real Kp, Real Kv, Real Kw, Real T1,
 				mT1, mT2, mT1, mT4,
 				mVs_max, mVs_min,
 				mTw);
+	mSLog->flush();
 }
 
 void Signal::PSS1A::initialize(Real omega, Real activePower, Real Vd, Real Vq) {
@@ -70,6 +71,7 @@ void Signal::PSS1A::initialize(Real omega, Real activePower, Real Vd, Real Vq) {
 				"\nmV3(t=0): {:e}"
 				"\nmVs(t=0): {:e}",
 				**mV1, **mV2, **mV3, **mVs);
+	mSLog->flush();
 }
 
 Real Signal::PSS1A::step(Real omega, Real activePower, Real Vd, Real Vq, Real dt) {

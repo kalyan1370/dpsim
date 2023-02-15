@@ -45,6 +45,7 @@ void addSPPh1Components(py::module_ mSPPh1) {
         .def(py::init<std::string>())
 		.def(py::init<std::string, CPS::Logger::Level>())
         .def("set_parameters", &CPS::SP::Ph1::Capacitor::setParameters, "C"_a)
+		.def("set_base_voltage", &CPS::SP::Ph1::Capacitor::setBaseVoltage, "base_voltage"_a)
 		.def("connect", &CPS::SP::Ph1::Capacitor::connect)
 		.def_property("C", createAttributeGetter<CPS::Real>("C"), createAttributeSetter<CPS::Real>("C"));
 
