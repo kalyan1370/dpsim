@@ -76,6 +76,7 @@ void SP::Ph1::VoltageSource::initializeFromNodesAndTerminals(Real frequency) {
 		Logger::phasorToString(mSrcSig->getSignal()),
 		Logger::phasorToString(initialSingleVoltage(0)),
 		Logger::phasorToString(initialSingleVoltage(1)));
+	mSLog->flush();
 }
 
 // #### MNA functions ####
@@ -103,6 +104,7 @@ void SP::Ph1::VoltageSource::mnaCompInitialize(Real omega, Real timeStep, Attrib
 		"\n--- MNA initialization finished ---",
 		Logger::phasorToString((**mIntfVoltage)(0,0)),
 		Logger::phasorToString((**mIntfCurrent)(0,0)));
+	mSLog->flush();
 }
 
 void SP::Ph1::VoltageSource::mnaCompApplySystemMatrixStamp(SparseMatrixRow& systemMatrix) {
