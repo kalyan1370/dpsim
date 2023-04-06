@@ -71,13 +71,7 @@ void ExciterDC1Simp::initialize(Real Vh_init, Real Ef_init) {
 
 	/// ceiling function
 	mVsat = mAef * exp(mBef * abs(mEf));
-
-<<<<<<< HEAD
-	//
-	mVref = **mVr / mKa + **mVm;
-
-	SPDLOG_LOGGER_INFO(mSLog, "Actually applied excitation system initial values:"
-=======
+	
 	/// init value of amplifier output
 	mVa = mKef * mEf + mVsat * mEf;
 	if (mVa>mMaxVa)
@@ -92,11 +86,10 @@ void ExciterDC1Simp::initialize(Real Vh_init, Real Ef_init) {
 	mVref = mVr + mVin;
 
 	/// check initial conditions
-	if (mEf - mVa / (mVsat + mKef))
-		mSLog->warn("Initial conditions are not consistent!!!");
+	if (abs(mEf - mVa / (mVsat + mKef))>1e-6)
+		SPDLOG_LOGGER_WARN(mSLog, "Initial conditions are not consistent!!!");
 	
-	mSLog->info("Actually applied excitation system initial values:"
->>>>>>> 32920b70 (add exciter DC1)
+	SPDLOG_LOGGER_INFO(mSLog, "Actually applied excitation system initial values:"
 				"\nVref : {:e}"
 				"\ninit_Vr: {:e}"
 				"\ninit_Ef: {:e}"

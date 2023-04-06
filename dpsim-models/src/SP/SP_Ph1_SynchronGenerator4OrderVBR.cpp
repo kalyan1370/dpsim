@@ -50,11 +50,9 @@ void SP::Ph1::SynchronGenerator4OrderVBR::specificInitialization() {
 
 void SP::Ph1::SynchronGenerator4OrderVBR::stepInPerUnit() {
 
-	if (mSimTime>0.0) {
-		// calculate Edq_t at t=k
-		(**mEdq_t)(0,0) = -(**mIdq)(1,0) * mLq_t + (**mVdq)(0,0);
-		(**mEdq_t)(1,0) = (**mIdq)(0,0) * mLd_t + (**mVdq)(1,0);
-	}
+	// calculate Edq_t at t=k
+	(**mEdq_t)(0,0) = -(**mIdq)(1,0) * mLq_t + (**mVdq)(0,0);
+	(**mEdq_t)(1,0) = (**mIdq)(0,0) * mLd_t + (**mVdq)(1,0);
 
 	// get transformation matrix
 	mDqToComplexA = get_DqToComplexATransformMatrix();

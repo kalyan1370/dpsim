@@ -671,7 +671,7 @@ TopologicalPowerComp::Ptr Reader::mapSynchronousMachine(CIMPP::SynchronousMachin
 								Ld_s, Lq_s, Td0_s, Tq0_s); 
 							return gen;
 						} else if (mGeneratorType == GeneratorType::SG5bOrderVBR) {
-							mSLog->info("    GeneratorType is SynchronGenerator5bOrderVBR.");
+							SPDLOG_LOGGER_INFO(mSLog, "    GeneratorType is SynchronGenerator5bOrderVBR.");
 							auto gen = std::make_shared<SP::Ph1::SynchronGenerator5bOrderVBR>(machine->mRID, machine->name, mComponentLogLevel);
 							gen->setOperationalParametersPerUnit(
 								ratedPower, ratedVoltage, mFrequency, H,

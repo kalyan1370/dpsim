@@ -270,7 +270,7 @@ void Base::ReducedOrderSynchronGenerator<VarType>::setInitialValues(
 
 	mInitialValuesSet = true;
 
-	this->mSLog->info(
+	SPDLOG_LOGGER_INFO(this->mSLog, 
 		"\n--- Set initial values  ---"
 		"\nInitial active power: {:}W = {:} p.u."
 		"\nInitial reactive power W: {:}W = {:} p.u."

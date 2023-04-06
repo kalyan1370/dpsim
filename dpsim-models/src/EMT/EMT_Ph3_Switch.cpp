@@ -115,16 +115,9 @@ void EMT::Ph3::Switch::mnaCompApplySystemMatrixStamp(SparseMatrixRow& systemMatr
 		Logger::matrixToString(conductance));
 }
 
-<<<<<<< HEAD
 void EMT::Ph3::Switch::mnaCompApplySwitchSystemMatrixStamp(Bool closed, SparseMatrixRow& systemMatrix, Int freqIdx) {
 	MatrixFixedSize<3, 3> conductance = (closed) ?
 		(**mClosedResistance).inverse() : (**mOpenResistance).inverse();
-=======
-void EMT::Ph3::Switch::mnaApplySwitchSystemMatrixStamp(Bool closed, SparseMatrixRow& systemMatrix, Int freqIdx) {
-	//Matrix conductance = (closed) ? (**mClosedResistance).inverse() : (**mOpenResistance).inverse();
-	Matrix conductance = Matrix::Zero(3, 3);
-	(closed) ? Math::invertMatrix(**mClosedResistance, conductance) : Math::invertMatrix(**mOpenResistance, conductance);
->>>>>>> 8a970e87 (apply sparse system matrix stamps. use macros for logging. invert 2-by-2 and 3-by-3 matrices by hand)
 
 	// Set diagonal entries
 	if (terminalNotGrounded(0)) {
@@ -209,10 +202,6 @@ void EMT::Ph3::Switch::mnaCompUpdateVoltage(const Matrix& leftVector) {
 }
 
 void EMT::Ph3::Switch::mnaCompUpdateCurrent(const Matrix& leftVector) {
-<<<<<<< HEAD
-=======
-	//**mIntfCurrent = (**mSwitchClosed) ? (**mClosedResistance).inverse() * **mIntfVoltage: (**mOpenResistance).inverse() * **mIntfVoltage;
->>>>>>> 8a970e87 (apply sparse system matrix stamps. use macros for logging. invert 2-by-2 and 3-by-3 matrices by hand)
 	Matrix conductance = Matrix::Zero(3, 3);
 	(**mSwitchClosed) ? Math::invertMatrix(**mClosedResistance, conductance) : Math::invertMatrix(**mOpenResistance, conductance);
 

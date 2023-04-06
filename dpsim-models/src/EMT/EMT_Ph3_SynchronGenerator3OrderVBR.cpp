@@ -44,10 +44,8 @@ void EMT::Ph3::SynchronGenerator3OrderVBR::specificInitialization() {
 
 void EMT::Ph3::SynchronGenerator3OrderVBR::stepInPerUnit() {
 
-	if (mSimTime>0.0) {
-		// calculate Eq_t at t=k
-		(**mEdq0_t)(1,0) = (**mIdq0)(0,0) * mLd_t + (**mVdq0)(1,0);
-	}
+	// calculate Eq_t at t=k
+	(**mEdq0_t)(1,0) = (**mIdq0)(0,0) * mLd_t + (**mVdq0)(1,0);
 
 	// get transformation matrix
 	mAbcToDq0 = get_parkTransformMatrix();

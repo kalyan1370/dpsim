@@ -46,10 +46,8 @@ void SP::Ph1::SynchronGenerator3OrderVBR::specificInitialization() {
 }
 
 void SP::Ph1::SynchronGenerator3OrderVBR::stepInPerUnit() {
-	if (mSimTime>0.0) {
-		// calculate Eq_t at t=k
-		(**mEdq_t)(1,0) = (**mIdq)(0,0) * mLd_t + (**mVdq)(1,0);
-	}
+	// calculate Eq_t at t=k
+	(**mEdq_t)(1,0) = (**mIdq)(0,0) * mLd_t + (**mVdq)(1,0);
 
 	mDqToComplexA = get_DqToComplexATransformMatrix();
 	mComplexAToDq = mDqToComplexA.transpose();

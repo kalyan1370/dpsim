@@ -54,13 +54,14 @@ void EMT::Ph3::ResIndSeries::initializeFromNodesAndTerminals(Real frequency) {
 	**mIntfVoltage = vInitABC.real();
 	**mIntfCurrent = (impedance.inverse() * vInitABC).real();
 
-	mSLog->info("\nResistance matrix [Ohm]: {:s}"
-				"\nInductance matrix [H]: {:s}"
-				"\nImpedance  matrix [Ohm]: {:s}",
-				Logger::matrixToString(**mResistance),
-				Logger::matrixToString(**mInductance),
-				Logger::matrixCompToString(impedance));
-	mSLog->info(
+	SPDLOG_LOGGER_INFO(mSLog, 
+		"\nResistance matrix [Ohm]: {:s}"
+		"\nInductance matrix [H]: {:s}"
+		"\nImpedance  matrix [Ohm]: {:s}",
+		Logger::matrixToString(**mResistance),
+		Logger::matrixToString(**mInductance),
+		Logger::matrixCompToString(impedance));
+	SPDLOG_LOGGER_INFO(mSLog, 
 		"\n--- Initialization from powerflow ---"
 		"\nVoltage across: {:s}"
 		"\nCurrent: {:s}"
@@ -89,7 +90,7 @@ void EMT::Ph3::ResIndSeries::mnaCompInitialize(Real omega, Real timeStep, Attrib
 	updateMatrixNodeIndices();
 	initVars(timeStep);
 
-	mSLog->info(
+	SPDLOG_LOGGER_INFO(mSLog, 
 		"\n--- MNA initialization ---"
 		"\nInitial current {:s}"
 		"\nEquiv. current {:s}"
@@ -125,7 +126,7 @@ void EMT::Ph3::ResIndSeries::mnaCompApplySystemMatrixStamp(SparseMatrixRow& syst
 		Math::addToMatrixElement(systemMatrix, matrixNodeIndex(1, 2), matrixNodeIndex(0, 2), -mEquivCond);
 	}
 
-	mSLog->info(
+	SPDLOG_LOGGER_INFO(mSLog, 
 		"\nEquivalent Conductance: {:}",
 		mEquivCond);
 }

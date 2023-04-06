@@ -35,21 +35,22 @@ void Signal::PSS1A::setParameters(Real Kp, Real Kv, Real Kw, Real T1,
 	mA = 1. - mT1 / mT2;
 	mB = 1. - mT3 / mT4;
 
-	mSLog->info("PSS Type2 parameters: \n"
-				"Kp: {:e}"
-				"\nKv: {:e}"
-				"\nKw: {:e}"
-				"\nT1: {:e}"
-				"\nT2: {:e}"
-				"\nT3: {:e}"
-				"\nT4: {:e}"
-				"\nMaximum stabiliter output signal: {:e}"
-				"\nMinimum stabiliter output signal: {:e}"
-				"\nTw: {:e}",
-				Kp, Kv, Kw,
-				mT1, mT2, mT1, mT4,
-				mVs_max, mVs_min,
-				mTw);
+	SPDLOG_LOGGER_INFO(mSLog, 
+		"PSS Type2 parameters: \n"
+		"Kp: {:e}"
+		"\nKv: {:e}"
+		"\nKw: {:e}"
+		"\nT1: {:e}"
+		"\nT2: {:e}"
+		"\nT3: {:e}"
+		"\nT4: {:e}"
+		"\nMaximum stabiliter output signal: {:e}"
+		"\nMinimum stabiliter output signal: {:e}"
+		"\nTw: {:e}",
+		Kp, Kv, Kw,
+		mT1, mT2, mT1, mT4,
+		mVs_max, mVs_min,
+		mTw);
 	mSLog->flush();
 }
 
@@ -65,12 +66,13 @@ void Signal::PSS1A::initialize(Real omega, Real activePower, Real Vd, Real Vq) {
 
 	mOmega_prev = omega;
 
-	mSLog->info("Initial values: "
-				"\nmV1(t=0): {:e}"
-				"\nmV2(t=0): {:e}"
-				"\nmV3(t=0): {:e}"
-				"\nmVs(t=0): {:e}",
-				**mV1, **mV2, **mV3, **mVs);
+	SPDLOG_LOGGER_INFO(mSLog, 
+		"Initial values: "
+		"\nmV1(t=0): {:e}"
+		"\nmV2(t=0): {:e}"
+		"\nmV3(t=0): {:e}"
+		"\nmVs(t=0): {:e}",
+		**mV1, **mV2, **mV3, **mVs);
 	mSLog->flush();
 }
 

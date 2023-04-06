@@ -50,6 +50,7 @@ void DP::Ph1::SynchronGenerator3OrderVBR::stepInPerUnit() {
 
 	// update Edq_t
 	(**mEdq_t)(1,0) = (**mVdq)(1,0) + (**mIdq)(0,0) * mLd_t;
+	
 	// VBR history voltage
 	calculateAuxiliarVariables();
 	calculateConductanceMatrix();
