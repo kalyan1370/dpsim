@@ -429,7 +429,6 @@ void EMT::Ph3::SynchronGeneratorVBR::CalculateL() {
 
 void EMT::Ph3::SynchronGeneratorVBR::CalculateAuxiliarConstants(Real dt) {
 
-	Matrix Fa_inv = Matrix::Zero(2, 2);
 	b11 = (mRkq1 / mLlkq1)*(mDLmq / mLlkq1 - 1);
 	b13 = mRkq1*mDLmq / mLlkq1;
 	b31 = (mRfd / mLlfd)*(mDLmd / mLlfd - 1);
@@ -484,13 +483,13 @@ void EMT::Ph3::SynchronGeneratorVBR::CalculateAuxiliarConstants(Real dt) {
 	F1b <<
 		dt*b33,
 		dt*b43;
-	F1 = Fa_inv * F1b;
+	F1 = Fa.inverse() * F1b;
 
 	F2b <<
 		2 + dt*b31, dt*b32,
 		dt*b41, 2 + dt*b42;
 
-	F2 = Fa_inv * F2b;
+	F2 = Fa.inverse() * F2b;
 
 	F3b <<
 		2 * dt,
