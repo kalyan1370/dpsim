@@ -97,7 +97,7 @@ void DP::Ph1::ResIndSeries::mnaCompInitialize(Real omega, Real timeStep, Attribu
 }
 
 void DP::Ph1::ResIndSeries::mnaCompInitializeHarm(Real omega, Real timeStep, std::vector<Attribute<Matrix>::Ptr> leftVectors) {
-		updateMatrixNodeIndices();
+	updateMatrixNodeIndices();
 
 	initVars(timeStep);
 

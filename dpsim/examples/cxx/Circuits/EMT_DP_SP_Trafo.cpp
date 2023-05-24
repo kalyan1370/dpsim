@@ -212,6 +212,7 @@ void simTrafoElementsDP1ph() {
 void simTrafoDP1ph() {
 	Real timeStep = 0.00005;
 	Real finalTime = 1;
+	std::cout << timeStep << timeStep  << finalTime << std::endl;
 	String simName = "DP_Trafo_Component";
 	Logger::setLogDir("logs/"+simName);
 
@@ -230,7 +231,7 @@ void simTrafoDP1ph() {
 
 	// Components
 	auto vs = DP::Ph1::VoltageSource::make("v_1", Logger::Level::debug);
-	auto trafo = DP::Ph1::Transformer::make("trafo", "trafo", Logger::Level::debug, true);
+	auto trafo = DP::Ph1::Transformer::make("trafo", "trafo", Logger::Level::debug);
 	auto loadRes = DP::Ph1::Resistor::make("r_1", Logger::Level::debug);
 
 	// Topology
@@ -245,7 +246,7 @@ void simTrafoDP1ph() {
 
 	// Define system topology
 	SystemTopology sys(50, SystemNodeList{n1, n2 }, SystemComponentList{vs, trafo, loadRes});
-
+//*
 	// Logging
 	auto logger = DataLogger::make(simName);
 	logger->logAttribute("v1", n1->attribute("v"));
@@ -260,6 +261,7 @@ void simTrafoDP1ph() {
 	sim.addLogger(logger);
 
 	sim.run();
+//*/
 }
 
 void simTrafoElementsEMT3ph() {
