@@ -220,7 +220,7 @@ void simTrafoDP1ph() {
 	Real voltageMVSide = 10000;
 	Real trafoResistance = 1;
 	Real trafoInductance = 0.1;
-	Real trafoPower = 1e6;
+	//Real trafoPower = 1e6;
 	Real loadResistanceHVSide = 10000;
 	Real ratio = voltageHVSide/voltageMVSide;
 	Real loadResistanceMVSide = loadResistanceHVSide/(ratio*ratio);
@@ -241,7 +241,7 @@ void simTrafoDP1ph() {
 
 	// Parameters
 	vs->setParameters(CPS::Math::polar(voltageHVSide, 0));
-	trafo->setParameters(voltageHVSide, voltageMVSide, trafoPower, ratio, 0, trafoResistance, trafoInductance);
+	trafo->setParameters(voltageHVSide, voltageMVSide, ratio, 0, trafoResistance, trafoInductance);
 	loadRes->setParameters(loadResistanceMVSide);
 
 	// Define system topology
