@@ -84,12 +84,13 @@ void DP::Ph1::Transformer::initVars(Real timeStep) {
 	for (Int freq = 0; freq < mNumFreqs; freq++) {
 		Real a = timeStep / (2. * **mInductance);
 		Real b = (timeStep * 2.*PI * mFrequencies(freq,0)) / 2.;
+		Real c = (1 + a * **mResistance) * (1 + a * **mResistance);
 
-		Real equivCondReal = ( a + a * a * **mResistance )  / (pow((1. + a * **mResistance),2) + b * b);
-		Real equivCondImag =  -(a * b) / (pow((1. + a * **mResistance),2) + b * b);
+		Real equivCondReal = ( a + (a * a * **mResistance) )  / c + (b * b);
+		Real equivCondImag =  -(a * b) / (pow((1. + a * **mResistance),2) + (b * b));
 		mEquivCond(freq,0) = { equivCondReal, equivCondImag };
-		Real preCurrFracReal = (( 1. - b * b ) - pow((a * **mResistance),2)) / pow((1. + a * **mResistance),2);
-		Real preCurrFracImag =  (-2. * b) / (pow((1. + a * **mResistance),2));
+		Real preCurrFracReal = (( 1. - b * b ) - pow((a * **mResistance),2)) / (c + (b * b));
+		Real preCurrFracImag =  (-2. * b) / (c + (b * b));
 		mPrevCurrFac(freq,0) = { preCurrFracReal, preCurrFracImag };
 
 		// TODO: check if this is correct or if it should be only computed before the step
@@ -186,7 +187,7 @@ void DP::Ph1::Transformer::mnaCompApplyRightSideVectorStamp(Matrix& rightVector)
 		if (terminalNotGrounded(0))
 			Math::setVectorElement(rightVector, matrixNodeIndex(0), mEquivCurrent(freq,0), mNumFreqs, freq);
 		if (terminalNotGrounded(1))
-			Math::setVectorElement(rightVector, matrixNodeIndex(1), - **mRatio * mEquivCurrent(freq,0), mNumFreqs, freq);
+			Math::setVectorElement(rightVector, matrixNodeIndex(1), -**mRatio * mEquivCurrent(freq,0), mNumFreqs, freq);
 
 		SPDLOG_LOGGER_DEBUG(mSLog, "MNA EquivCurrent {:s}", Logger::complexToString(mEquivCurrent(freq,0)));
 		if (terminalNotGrounded(0))
