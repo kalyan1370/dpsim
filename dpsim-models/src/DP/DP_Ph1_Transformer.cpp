@@ -125,8 +125,8 @@ void DP::Ph1::Transformer::initVars(Real timeStep) {
 
 		// TODO: check if this is correct or if it should be only computed before the step
 		mEquivCurrent(freq,0) = mEquivCond(freq,0) * (initialSingleVoltage(0) - initialSingleVoltage(1) * **mRatio) + 
-								mPrevCurrFac(freq,0) * (**mIntfCurrent)(0,freq);
-		//(**mIntfCurrent)(0,freq) = mEquivCond(freq,0) * (initialSingleVoltage(0) - initialSingleVoltage(1) * **mRatio) + mEquivCurrent(freq,0);
+								mPrevCurrFac(freq,0) * (**mIntfCurrent)(0, 0);
+		(**mIntfCurrent)(0,freq) = mEquivCond(freq,0) * (initialSingleVoltage(0) - initialSingleVoltage(1) * **mRatio) + mEquivCurrent(freq,0);
 	}
 }
 
@@ -210,9 +210,9 @@ void DP::Ph1::Transformer::mnaCompApplySystemMatrixStampHarm(SparseMatrixRow& sy
 void DP::Ph1::Transformer::mnaCompApplyRightSideVectorStamp(Matrix& rightVector) {
 	for (Int freq = 0; freq < mNumFreqs; freq++) {
 		if (terminalNotGrounded(0))
-			Math::setVectorElement(rightVector, matrixNodeIndex(0), mEquivCurrent(freq,0), mNumFreqs, freq);
+			Math::setVectorElement(rightVector, matrixNodeIndex(0), -mEquivCurrent(freq,0), mNumFreqs, freq);
 		if (terminalNotGrounded(1))
-			Math::setVectorElement(rightVector, matrixNodeIndex(1), -**mRatio * mEquivCurrent(freq,0), mNumFreqs, freq);
+			Math::setVectorElement(rightVector, matrixNodeIndex(1), **mRatio * mEquivCurrent(freq,0), mNumFreqs, freq);
 
 		SPDLOG_LOGGER_DEBUG(mSLog, "MNA EquivCurrent {:s}", Logger::complexToString(mEquivCurrent(freq,0)));
 		if (terminalNotGrounded(0))
@@ -274,9 +274,9 @@ void DP::Ph1::Transformer::mnaCompUpdateVoltage(const Matrix& leftVector) {
 	// v0 - v1
 	for (Int freq = 0; freq < mNumFreqs; freq++) {
 		(**mIntfVoltage)(0,freq) = 0;
-		if (terminalNotGrounded(1))
-			(**mIntfVoltage)(0,freq) = Math::complexFromVectorElement(leftVector, matrixNodeIndex(0), mNumFreqs, freq);
-		if (terminalNotGrounded(0)) {
+		if (terminalNotGrounded(0))
+			(**mIntfVoltage)(0,freq) += Math::complexFromVectorElement(leftVector, matrixNodeIndex(0), mNumFreqs, freq);
+		if (terminalNotGrounded(1)) {
 			// TODO: add other frequencies
 			**mSecondaryLV = Math::complexFromVectorElement(leftVector, matrixNodeIndex(1), mNumFreqs, freq);
 			**mPrimaryLV = **mSecondaryLV * **mRatio;
@@ -291,9 +291,9 @@ void DP::Ph1::Transformer::mnaCompUpdateVoltageHarm(const Matrix& leftVector, In
 	// CHECK
 	// v0 - v1
 	(**mIntfVoltage)(0,freqIdx) = 0;
-	if (terminalNotGrounded(1))
-		(**mIntfVoltage)(0,freqIdx) = Math::complexFromVectorElement(leftVector, matrixNodeIndex(0));
 	if (terminalNotGrounded(0))
+		(**mIntfVoltage)(0,freqIdx) = Math::complexFromVectorElement(leftVector, matrixNodeIndex(0));
+	if (terminalNotGrounded(1))
 		(**mIntfVoltage)(0,freqIdx) = (**mIntfVoltage)(0,freqIdx) - Math::complexFromVectorElement(leftVector, matrixNodeIndex(1));
 
 	SPDLOG_LOGGER_DEBUG(mSLog, "Voltage {:s}", Logger::phasorToString((**mIntfVoltage)(0,freqIdx)));
@@ -301,7 +301,7 @@ void DP::Ph1::Transformer::mnaCompUpdateVoltageHarm(const Matrix& leftVector, In
 
 void DP::Ph1::Transformer::mnaCompUpdateCurrent(const Matrix& leftVector) {
 	for (Int freq = 0; freq < mNumFreqs; freq++) {
-		(**mIntfCurrent)(0,freq) = mEquivCond(freq,0) * (Math::complexFromVectorElement(leftVector, matrixNodeIndex(0)) -**mSecondaryLV) + mEquivCurrent(0,0);
+		(**mIntfCurrent)(0,freq) = mEquivCond(freq,0) * (Math::complexFromVectorElement(leftVector, matrixNodeIndex(0)) -**mPrimaryLV) + mEquivCurrent(0,0);
 		SPDLOG_LOGGER_DEBUG(mSLog, "Current {:s}", Logger::phasorToString((**mIntfCurrent)(0,freq)));
 	}
 
@@ -311,11 +311,12 @@ void DP::Ph1::Transformer::mnaCompUpdateCurrent(const Matrix& leftVector) {
 
 	// Calculate equivalent current source for next time step
 	mEquivCurrent(0,0) =
-		mEquivCond(0,0) * (**mIntfVoltage)(0,0) +  mPrevCurrFac(0,0) * (**mIntfCurrent)(0,0);
+		mEquivCond(0,0) * (Math::complexFromVectorElement(leftVector, matrixNodeIndex(0)) - **mPrimaryLV) +  mPrevCurrFac(0,0) * (**mIntfCurrent)(0,0);
 
 }
 
-void DP::Ph1::Transformer::mnaCompUpdateCurrentHarm(const Matrix& leftVector, Int freqIdx) { 
+void DP::Ph1::Transformer::mnaCompUpdateCurrentHarm(const Matrix& leftVector, Int freqIdx) {
+	// CHECK
 	for (Int freq = 0; freq < mNumFreqs; freq++) {
 		(**mIntfCurrent)(0,freq) = mEquivCond(freq,0) * Math::complexFromVectorElement(leftVector, matrixNodeIndex(0)) + mEquivCurrent(freq,0);
 		SPDLOG_LOGGER_DEBUG(mSLog, "Current {:s}", Logger::phasorToString((**mIntfCurrent)(0,freq)));
