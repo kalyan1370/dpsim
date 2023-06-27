@@ -40,7 +40,7 @@ i_{n0}(t) = \frac{(1-b^{2} - (aR)^{2} -j2b) }{(1+aR)^{2}+b^{2}} * i_{n0}(t - \De
 ```
 with
 ```math
-v(t) = v_n_0(t) - v'_n_1(t), \qquad v'_n_1(t)= n * v_n_1(t) , \qquad i_n_1(t) = n * i_n_0(t)
+v(t) = v_{n0}(t) - v^{'}_{n1}(t), \qquad v{'}_{n1}(t)= n * v_{n1}(t) , \qquad i_{n1}(t) = n * i_{n0}(t)
 ```
 
 Substituting for v(t) , we get 
@@ -50,10 +50,10 @@ i_{n0}(t) = \frac{a+a^{2}R - jab}{(1+aR)^{2} + b^{2}} \cdot (v_{n0}(t) - n v_{n1
 
 This is equivalent to 
 ```math
-i_n_0(t) = Y_e_q * (v_n_0(t) - n*v_n_1(t)) + I_e_q 
+i_{n0}(t) = Y_{eq} (v_{n0}(t) - nv_{n1}(t)) + I_{eq} 
 ```
 ```math
-i_n_1(t) = - n * i_n_0(t)
+i_{n1}(t) = - n i_{n0}(t)
 ```
 
 So the admittance matrix becomes 
@@ -65,16 +65,16 @@ i_{n1} \cr
 \end{pmatrix}
 =
 \begin{pmatrix}
-  Y_{eq} & -n*Y_{eq}\cr
-  -n*Y_{eq} & n^2* Y_{eq} \cr
+  Y_{eq} & -nY_{eq}\cr
+  -nY_{eq} & n^{2} Y_{eq} \cr
 \end{pmatrix} 
 * 
 \begin{pmatrix}
-v_n_0 \cr
-v_n_1 \cr
+v_{n0} \cr
+v_{n1} \cr
 \end{pmatrix} + 
 \begin{pmatrix}
-I_e_q \cr
--I_e_q \cr
+I_{eq} \cr
+-I_{eq} \cr
 \end{pmatrix}
 ```
