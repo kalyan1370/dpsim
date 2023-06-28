@@ -19,7 +19,7 @@ $$
 Transforming it to DP domain , the RL segment is described by 
 
 $$
-  \frac{\mathrm{d} i_L(t)}{\mathrm{d}t} + j\omega \cdot i_L(t)= \frac{v_j(t) - v_k(t) - R \cdot i_L(t)}{L}
+  \frac{\mathrm{d} \langle i \rangle}{\mathrm{d}t} + j\omega \cdot i_L(t)= \frac{v_j(t) - v_k(t) - R \cdot i_L(t)}{L}
 $$
 
 Applying the trapezoidal method leads to the finite difference equation:
