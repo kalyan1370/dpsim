@@ -92,11 +92,11 @@ void DP::Ph1::PQLoadCS::initializeFromNodesAndTerminals(Real frequency) {
 void DP::Ph1::PQLoadCS::updateSetPoint() {
 	// Calculate new current set point.
 	Complex power = { **mActivePower, **mReactivePower};
-	Complex current = power / **mNomVoltage;
-	//Complex current = power / (**mIntfVoltage)(0,0);
+	//Complex current = power / **mNomVoltage;
+	Complex current = power / (**mIntfVoltage)(0,0);
 
 	**mSubCurrentSource->mCurrentRef = std::conj(current);
-	SPDLOG_LOGGER_DEBUG(mSLog, 
+	SPDLOG_LOGGER_INFO(mSLog, 
 		"\n--- update set points ---"
 		"\npower: {:s}"
 		"\nCurrent: {:s}",
